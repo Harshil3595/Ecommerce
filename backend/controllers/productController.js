@@ -3,49 +3,11 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncError");
 const ApiFeatures = require("../utils/apifeatures");
 
-const multer = require('multer');
-
-// Set up multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Set the destination folder where the uploaded images will be saved
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname); // Set the filename for the uploaded image
-  },
-});
-
-// Set up multer upload
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1024 * 1024 * 5, // 5MB file size limit
-  },
-}).array('avatar', 5); // Assuming the field name is 'avatar' and you allow up to 5 images
-
+//create product --  Admin
 exports.createProduct = catchAsyncErrors(async (req, res) => {
   req.body.user = req.user.id;
   const product = await Product.create(req.body);
-
-  // Upload the images using the upload middleware
-  upload(req, res, async (err) => {
-    if (err) {
-      // Handle upload errors
-      console.error(err);
-      return res.status(400).json({ success: false, error: 'Image upload failed' });
-    }
-
-    console.log(req); // Log the req object to check its structure
-
-    // Images uploaded successfully
-    const urls = req.files.map((file) => file.path); // Retrieve the file paths of the uploaded images
-
-    // Save the image URLs to the product object
-    product.images = urls;
-    await product.save();
-
-    res.status(201).json({ success: true, product });
-  });
+  res.status(201).json({ success: true, product });
 });
 
 //get all product

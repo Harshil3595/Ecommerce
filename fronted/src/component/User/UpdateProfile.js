@@ -9,6 +9,7 @@ import { useAlert } from "react-alert";
 import MetaData from "../layout/MetaData";
 import { UPDATE_PROFILE_RESET } from "../../constants/userConstans";
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 const UpdateProfile = ({ history }) => {
   const dispatch = useDispatch();
@@ -60,9 +61,8 @@ const UpdateProfile = ({ history }) => {
     }
 
     if (isUpdated) {
-      alert.success("Profile Updated Successfully");
+      message.success("Profile Updated Successfully");
       dispatch(loadUser());
-
       navigate("/account");
 
       dispatch({

@@ -4,29 +4,33 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncError");
 
 exports.newOrder = catchAsyncErrors(async (req, res, next) => {
-  const {
-    shippingInfo,
-    orderItems,
-    paymentInfo,
-    itemPrice,
-    taxPrice,
-    shippingPrice,
-    totalPrice,
-  } = req.body;
+  try {
+    const {
+      shippingInfo,
+      orderItems,
+      paymentInfo,
+      itemPrice,
+      taxPrice,
+      shippingPrice,
+      totalPrice,
+    } = req.body;
 
-  const order = await Order.create({
-    shippingInfo,
-    orderItems,
-    paymentInfo,
-    itemPrice,
-    taxPrice,
-    shippingPrice,
-    totalPrice,
-    paidAt: Date.now(),
-    user: req.user._id,
-  });
+    const order = await Order.create({
+      shippingInfo,
+      orderItems,
+      paymentInfo,
+      itemPrice,
+      taxPrice,
+      shippingPrice,
+      totalPrice,
+      paidAt: Date.now(),
+      user: req.user._id,
+    });
 
-  res.status(201).json({ success: true, order });
+    res.status(201).json({ success: true, order });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 //get single order
@@ -68,11 +72,11 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
 
   if (!order) {
-    return next(new ErrorHander("Order not found with this Id", 404));
+    return next(new ErrorHandler("Order not found with this Id", 404));
   }
 
   if (order.orderStatus === "Delivered") {
-    return next(new ErrorHander("You have already delivered this order", 400));
+    return next(new ErrorHandler("You have already delivered this order", 400));
   }
 
   if (req.body.status === "Shipped") {

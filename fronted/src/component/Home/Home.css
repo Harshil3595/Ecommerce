@@ -9,7 +9,11 @@
     text-align: center;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: red;
+  }
+
+  .banner-text {
+    color: white; 
   }
   
   .banner > h1 {

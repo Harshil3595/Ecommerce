@@ -51,14 +51,7 @@ const NewProduct = () => {
       dispatch({ type: NEW_PRODUCT_RESET });
     }
   }, [dispatch, alert, error, navigate, success]);
-  const formDataToObject = (formData) => {
-    const obj = {};
-    for (let [key, value] of formData.entries()) {
-      obj[key] = value;
-    }
-    return obj;
-  };
-  
+
   const createProductSubmitHandler = (e) => {
     e.preventDefault();
 
@@ -77,8 +70,13 @@ const NewProduct = () => {
     } else {
       myForm.append("images", "No images selected");
     }
-    const formDataObject = formDataToObject(myForm);
-    console.log(formDataObject);
+
+    const formDataJson = {};
+  for (let [key, value] of myForm.entries()) {
+    formDataJson[key] = value;
+  }
+
+    console.log("Data getting from form : ",formDataJson);
     dispatch(createProduct(myForm));
   };
 
