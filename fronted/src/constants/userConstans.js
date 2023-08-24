@@ -1,3 +1,5 @@
+import axios  from "axios";
+
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
@@ -43,3 +45,7 @@ export const DELETE_USER_FAIL = "DELETE_USER_FAIL";
 export const DELETE_USER_RESET = "DELETE_USER_RESET";
 
 export const CLEAR_ERROR = "CLEAR_ERROR";
+
+export const instance = axios.create({
+    baseURL: 'http://localhost:5000',
+  });

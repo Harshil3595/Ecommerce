@@ -15,7 +15,7 @@ import { DELETE_USER_RESET } from "../../constants/userConstans";
 
 const UsersList = () => {
   const dispatch = useDispatch();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const alert = useAlert();
 

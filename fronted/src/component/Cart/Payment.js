@@ -12,7 +12,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 
-import axios from "axios";
+import { instance as axios } from "../../constants/userConstans";
 import "./Payment.css";
 import CreditCardIcon from "@material-ui/icons/CreditCard";
 import EventIcon from "@material-ui/icons/Event";
@@ -53,11 +53,15 @@ const Payment = () => {
     payBtn.current.disabled = true;
 
     try {
+      const token = localStorage.getItem("token");
+
       const config = {
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        }
       };
+
       const { data } = await axios.post(
         "/api/v1/payment/process",
         paymentData,

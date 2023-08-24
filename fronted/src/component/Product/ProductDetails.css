@@ -16,10 +16,14 @@
   padding: 2vmax;
   box-sizing: border-box;
   border: 1px solid white;
-} 
+}
 
 .ProductDetails>div:last-child {
   align-items: flex-start;
+}
+
+.CarouselImage {
+  width: 20vmax;
 }
 
 .detailsBlock-1>h2 {

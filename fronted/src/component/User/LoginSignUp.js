@@ -78,12 +78,10 @@ const LoginSignUp = () => {
 
   useEffect(() => {
     if(error){
-      message.error(error);
       dispatch(clearErrors());
     }
     if(isAuthenticated){
       navigate(redirect);
-      message.success("Login succesfully")
     }
   }, [alert,dispatch,error,isAuthenticated,redirect,navigate]);
 

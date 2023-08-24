@@ -8,11 +8,6 @@ const cloudinary = require("cloudinary");
 
 //register user
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-    // const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    //   folder: "avatars",
-    //   width: 150,
-    //   crop: "scale",
-    // });
   
     const { name, email, password } = req.body;
   
@@ -42,7 +37,7 @@ exports.loginUser=catchAsyncErrors(async (req,res,next) => {
     const user=await User.findOne({email}).select("+password");
 
     if(!user){
-        return next(new ErrorHandler("Invalid email or password",401));
+        res.status(401).json({success:false,message:"User doest not exit"})
     }
 
     const isPasswordMatched=await user.comparePassword(password);
@@ -99,12 +94,22 @@ exports.forgotPassword=catchAsyncErrors(async(req,res,next)=>{
     }
 })
 
-//Get user Details
-exports.getUserDetails = catchAsyncErrors(async (req,res,next)=>{
-    const user=await User.findById(req.user.id);
 
-    res.status(200).json({success:true,user})
-})
+exports.getUserDetails = async (req, res) => {
+    try {
+      const userId = req.user;
+  
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).send({ success: false, message: 'User not found' });
+      }
+  
+      return res.status(200).send({ success: true, user });
+    } catch (err) {
+      return res.status(500).send({ success: false, message: err.message });
+    }
+  };
 
 //update user Details
 exports.updatePassword = catchAsyncErrors(async (req,res,next)=>{
@@ -139,7 +144,7 @@ exports.updateProfile = catchAsyncErrors(async (req,res,next)=>{
         useFindAndModify:false,
     })
 
-    res.status(200).json({success:true})
+    res.status(200).json({success:true,user})
 })
 
 //get all users - adim
@@ -159,21 +164,30 @@ exports.getSingleUser = catchAsyncErrors(async (req,res,next)=>{
 })
 
 //update Role - admin
-exports.updateUserRole = catchAsyncErrors(async (req,res,next)=>{
-    const newUserData={
-        name:req.body.name,
-        email:req.body.email,
-        role:req.body.role
+exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email,
+        role: req.body.role
     }
 
-    const user=await User.findByIdAndUpdate(req.params.id,newUserData,{
-        new:true,
-        runValidators:true,
-        useFindAndModify:false,
-    })
+    try {
+        const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+            new: true,
+            runValidators: true,
+            useFindAndModify: false,
+        });
 
-    res.status(200).json({success:true})
-})
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        res.status(200).json({ success: true, user: user });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 
 //delete user - admin
 exports.deleteProfile = catchAsyncErrors(async (req, res, next) => {

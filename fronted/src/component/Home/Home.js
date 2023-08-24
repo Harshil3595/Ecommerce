@@ -27,8 +27,8 @@ function Home() {
       <>
       <MetaData title="Ecommerce" />
       <div className="banner">
-        <p>Welcome to Ecommerce </p>
-        <h1>Find Amazing Product Below</h1>
+        <p className="banner-text">Welcome to Ecommerce </p>
+        <h1 className="banner-text">Find Amazing Product Below</h1>
         <a href="#container">
           <button>
             Scroll

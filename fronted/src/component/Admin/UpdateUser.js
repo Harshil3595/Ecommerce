@@ -22,7 +22,6 @@ const UpdateUser = () => {
   const navigate=useNavigate();
 
   const { id } = useParams();
-  console.log("jjjj",id);
 
   const { loading, error, user } = useSelector((state) => state.userDetails);
 
